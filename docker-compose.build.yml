@@ -1,0 +1,134 @@
+services:
+  typebot-db-docker:
+    image: postgres:16
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=typebot
+      - POSTGRES_PASSWORD=typebot
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - typebot-network
+
+  typebot-redis:
+    image: redis:alpine
+    restart: always
+    command: --save 60 1 --loglevel warning
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    volumes:
+      - redis-data:/data
+    networks:
+      - typebot-network
+
+  typebot-migrate:
+    build:
+      context: .
+      target: builder
+      args:
+        - SCOPE=builder
+        - DATABASE_URL=postgresql://postgres:typebot@typebot-db-docker:5432/typebot?schema=public
+        - ENCRYPTION_SECRET=abcdefghijklmnopqrstuvwxyz123456
+        - NEXTAUTH_URL=https://bot.richattpay.com
+        - NEXT_PUBLIC_VIEWER_URL=https://botview.richattpay.com
+    depends_on:
+      typebot-db-docker:
+        condition: service_healthy
+    networks:
+      - typebot-network
+    env_file: .env.docker
+    environment:
+      - DATABASE_URL=postgresql://postgres:typebot@typebot-db-docker:5432/typebot?schema=public
+    command: ["bun", "x", "prisma", "migrate", "deploy", "--schema=postgresql/schema.prisma"]
+    working_dir: /app/packages/prisma
+    restart: "no"
+
+  typebot-builder:
+    build:
+      context: .
+      target: release
+      args:
+        - SCOPE=builder
+        - DATABASE_URL=postgresql://postgres:typebot@typebot-db-docker:5432/typebot?schema=public
+        - ENCRYPTION_SECRET=abcdefghijklmnopqrstuvwxyz123456
+        - NEXTAUTH_URL=https://bot.richattpay.com
+        - NEXT_PUBLIC_VIEWER_URL=https://botview.richattpay.com
+        - CONTENT_SECURITY_POLICY_DISABLED=true
+    depends_on:
+      typebot-db-docker:
+        condition: service_healthy
+      typebot-redis:
+        condition: service_healthy
+      typebot-minio:
+        condition: service_started
+      typebot-migrate:
+        condition: service_completed_successfully
+    restart: always
+    ports:
+      - "8200:3000"
+    networks:
+      - typebot-network
+    env_file: .env.docker
+    environment:
+      - REDIS_URL=redis://typebot-redis:6379
+
+  typebot-viewer:
+    build:
+      context: .
+      target: release
+      args:
+        - SCOPE=viewer
+        - DATABASE_URL=postgresql://postgres:typebot@typebot-db-docker:5432/typebot?schema=public
+        - ENCRYPTION_SECRET=abcdefghijklmnopqrstuvwxyz123456
+        - NEXTAUTH_URL=https://bot.richattpay.com
+        - NEXT_PUBLIC_VIEWER_URL=https://botview.richattpay.com
+    depends_on:
+      typebot-db-docker:
+        condition: service_healthy
+      typebot-redis:
+        condition: service_healthy
+      typebot-minio:
+        condition: service_started
+      typebot-migrate:
+        condition: service_completed_successfully
+    restart: always
+    ports:
+      - "8201:3000"
+    networks:
+      - typebot-network
+    env_file: .env.docker
+    environment:
+      - REDIS_URL=redis://typebot-redis:6379
+  typebot-minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    restart: always
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin123
+      - MINIO_API_CORS_ALLOW_ORIGIN=https://bot.richattpay.com,https://botview.richattpay.com,http://172.31.35.144:8201
+    ports:
+      - "9010:9000"
+      - "9011:9001"
+    volumes:
+      - minio-data:/data
+    networks:
+      - typebot-network
+
+networks:
+  typebot-network:
+    driver: bridge
+
+volumes:
+  db-data:
+  redis-data:
+  minio-data:

@@ -1,0 +1,139 @@
+import { createActionHandler } from "@typebot.io/forge"
+import ky from "ky"
+import { send3CXMessage } from "../actions/send3CXMessage"
+
+export const send3CXMessageHandler = createActionHandler(send3CXMessage, {
+  server: async ({ options, logs }) => {
+    const {
+      webhookUrl,
+      businessId,
+      phoneNumberId,
+      displayPhoneNumber,
+      fromNumber,
+      contactName,
+      messageText,
+      mediaUrl,
+      mediaCaption
+    } = options
+
+    // Validation des champs obligatoires
+    if (!webhookUrl || !businessId || !phoneNumberId || !displayPhoneNumber || !fromNumber) {
+      logs.add("3CX: Paramètres de configuration manquants")
+      return
+    }
+
+    // Déterminer le type de message
+    const hasMedia = mediaUrl && mediaUrl.trim() !== ""
+    const hasText = messageText && messageText.trim() !== ""
+
+    if (!hasMedia && !hasText) {
+      logs.add("3CX: Aucun contenu à envoyer (texte ou média requis)")
+      return
+    }
+
+    // Détection automatique du type de média
+    let messageType = "text"
+    let mediaContent: any = null
+
+    if (hasMedia) {
+      const url = mediaUrl.toLowerCase()
+
+      if (url.includes('.jpg') || url.includes('.jpeg') || url.includes('.png') || url.includes('.gif') || url.includes('.webp')) {
+        messageType = "image"
+        mediaContent = {
+          link: mediaUrl,
+          caption: mediaCaption || messageText || ""
+        }
+      } else if (url.includes('.mp4') || url.includes('.mov') || url.includes('.avi')) {
+        messageType = "video"
+        mediaContent = {
+          link: mediaUrl,
+          caption: mediaCaption || messageText || ""
+        }
+      } else if (url.includes('.mp3') || url.includes('.wav') || url.includes('.ogg') || url.includes('.m4a')) {
+        messageType = "audio"
+        mediaContent = {
+          link: mediaUrl
+        }
+      } else {
+        messageType = "document"
+        mediaContent = {
+          link: mediaUrl,
+          caption: mediaCaption || messageText || "",
+          filename: extractFilename(mediaUrl)
+        }
+      }
+    }
+
+    // Construction du message avec un ID unique pour éviter les boucles
+    const uniqueId = `typebot_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    
+    const message: any = {
+      from: fromNumber.replace("+", ""),
+      id: uniqueId,
+      timestamp: Math.floor(Date.now() / 1000).toString(),
+      type: messageType
+    }
+
+    // Ajouter le contenu selon le type
+    if (messageType === "text") {
+      message.text = {
+        body: messageText
+      }
+    } else {
+      message[messageType] = mediaContent
+    }
+
+    // Payload complet au format 3CX/Meta
+    const payload = {
+      object: "whatsapp_business_account",
+      entry: [{
+        id: businessId,
+        changes: [{
+          field: "messages",
+          value: {
+            messaging_product: "whatsapp",
+            metadata: {
+              display_phone_number: displayPhoneNumber,
+              phone_number_id: phoneNumberId
+            },
+            contacts: [{
+              profile: {
+                name: contactName || fromNumber
+              },
+              wa_id: fromNumber.replace("+", "")
+            }],
+            messages: [message]
+          }
+        }]
+      }]
+    }
+
+    try {
+      await ky.post(webhookUrl, {
+        json: payload,
+        timeout: 30000,
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'Typebot-3CX/1.0',
+          'X-Typebot-Message': 'true' // Header pour identifier les messages Typebot
+        }
+      })
+      logs.add(`3CX: ${messageType} envoyé avec succès (ID: ${uniqueId})`)
+    } catch (error: any) {
+      logs.add(`3CX Erreur: ${error.message}`)
+      logs.add(`3CX Type: ${messageType}`)
+    }
+  },
+})
+
+// Fonction helper pour extraire le nom de fichier
+function extractFilename(url: string): string {
+  try {
+    const urlObj = new URL(url)
+    const pathname = urlObj.pathname
+    return pathname.split('/').pop() || 'document'
+  } catch {
+    return 'document'
+  }
+}

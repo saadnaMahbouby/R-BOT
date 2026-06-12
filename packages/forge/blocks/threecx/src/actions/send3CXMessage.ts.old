@@ -1,0 +1,60 @@
+import { createAction, option } from "@typebot.io/forge"
+
+export const send3CXMessage = createAction({
+  name: "Envoyer vers 3CX",
+  options: option.object({
+    // Configuration 3CX
+    webhookUrl: option.string.layout({
+      label: "Webhook URL 3CX",
+      placeholder: "https://xxx.3cx.sc/sms/whatsapp/xxx",
+      isRequired: true,
+      helperText: "URL du webhook 3CX configuré pour WhatsApp",
+    }),
+    businessId: option.string.layout({
+      label: "Business Account ID",
+      placeholder: "1209741957334833",
+      isRequired: true,
+      helperText: "ID du compte WhatsApp Business dans 3CX",
+    }),
+    phoneNumberId: option.string.layout({
+      label: "Phone Number ID",
+      placeholder: "633542099835858", 
+      isRequired: true,
+      helperText: "ID du numéro de téléphone WhatsApp dans 3CX",
+    }),
+    displayPhoneNumber: option.string.layout({
+      label: "Display Phone Number",
+      placeholder: "32942393",
+      isRequired: true,
+      helperText: "Numéro affiché dans 3CX",
+    }),
+    
+    // Informations message
+    fromNumber: option.string.layout({
+      label: "Numéro expéditeur",
+      placeholder: "22241956109",
+      isRequired: true,
+      helperText: "Numéro WhatsApp de l'expéditeur (sans +)",
+    }),
+    contactName: option.string.layout({
+      label: "Nom du contact",
+      placeholder: "Client WhatsApp",
+      helperText: "Nom affiché dans 3CX pour ce contact",
+    }),
+    
+    // Contenu message
+    messageText: option.string.layout({
+      label: "Texte du message",
+      helperText: "Texte à envoyer (requis pour les messages texte)",
+    }),
+    mediaUrl: option.string.layout({
+      label: "URL du média (optionnel)",
+      placeholder: "https://example.com/file.jpg",
+      helperText: "URL publique du fichier (image, audio, vidéo, document)",
+    }),
+    mediaCaption: option.string.layout({
+      label: "Légende du média (optionnel)",
+      helperText: "Texte accompagnant le fichier média",
+    }),
+  }),
+})

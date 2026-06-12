@@ -1,0 +1,30 @@
+{
+  "name": "@typebot.io/auth",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./helpers/authenticateWithBearerToken": "./src/helpers/authenticateWithBearerToken.ts",
+    "./helpers/*": "./src/helpers/*.ts",
+    "./*": "./src/*.ts"
+  },
+  "dependencies": {
+    "@typebot.io/env": "workspace:*",
+    "@upstash/ratelimit": "^0.4.3",
+    "next-auth": "^5.0.0-beta.28",
+    "@typebot.io/user": "workspace:*",
+    "@typebot.io/lib": "workspace:*",
+    "@typebot.io/prisma": "workspace:*",
+    "@typebot.io/telemetry": "workspace:*",
+    "@typebot.io/config": "workspace:*",
+    "@typebot.io/zod": "workspace:*",
+    "bcryptjs": "^2.4.3",
+    "otplib": "^12.0.1",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@typebot.io/tsconfig": "workspace:*",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/qrcode": "^1.5.5"
+  }
+}

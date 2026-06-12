@@ -1,0 +1,139 @@
+import { createActionHandler } from "@typebot.io/forge"
+import ky from "ky"
+import { send3CXMessage } from "../actions/send3CXMessage"
+
+export const send3CXMessageHandler = createActionHandler(send3CXMessage, {
+  server: async ({ options, logs }) => {
+    console.log("🚀 [3CX] Handler démarré")
+    
+    const {
+      webhookUrl,
+      businessId,
+      phoneNumberId,
+      displayPhoneNumber,
+      fromNumber,
+      contactName,
+      messageText,
+      mediaUrl,
+      mediaCaption
+    } = options
+
+    if (!webhookUrl || !fromNumber) {
+      console.error("❌ [3CX] Paramètres manquants")
+      return
+    }
+
+    const hasMedia = mediaUrl && mediaUrl.trim() !== ""
+    const hasText = messageText && messageText.trim() !== ""
+
+    if (!hasMedia && !hasText) {
+      console.error("❌ [3CX] Aucun contenu")
+      return
+    }
+
+    const cleanNumber = fromNumber.replace(/[^0-9]/g, "")
+    
+    // NOUVEAU FORMAT : Direct Meta API
+    const sendDirectMessage = async (type: string, content: any) => {
+      const payload: any = {
+        messaging_product: "whatsapp",
+        to: cleanNumber,
+        type: type
+      }
+
+      if (type === "text") {
+        payload.text = { body: content }
+      } else {
+        payload[type] = content
+      }
+
+      console.log(`📤 [3CX] Envoi ${type}:`, JSON.stringify(payload, null, 2))
+
+      try {
+        const response = await ky.post(webhookUrl, {
+          json: payload,
+          timeout: 30000,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        
+        const responseText = await response.text()
+        console.log(`✅ [3CX] Réponse (${response.status}):`, responseText)
+        return response.status
+      } catch (error: any) {
+        console.error(`❌ [3CX] Erreur ${type}:`, error.message)
+        if (error.response) {
+          const errorText = await error.response.text()
+          console.error(`❌ [3CX] Détails:`, errorText)
+        }
+        throw error
+      }
+    }
+
+    try {
+      // Texte + Média
+      if (hasText && hasMedia) {
+        console.log("🔀 [3CX] Mode: Texte + Média")
+        
+        await sendDirectMessage("text", messageText)
+        logs.add("✅ Texte envoyé")
+        
+        await new Promise(r => setTimeout(r, 500))
+        
+        const mediaType = detectMediaType(mediaUrl)
+        const mediaContent = buildMediaContent(mediaType, mediaUrl, mediaCaption)
+        await sendDirectMessage(mediaType, mediaContent)
+        logs.add(`✅ ${mediaType} envoyé`)
+      }
+      // Média seul
+      else if (hasMedia) {
+        console.log("📎 [3CX] Mode: Média seul")
+        const mediaType = detectMediaType(mediaUrl)
+        const mediaContent = buildMediaContent(mediaType, mediaUrl, mediaCaption || messageText)
+        await sendDirectMessage(mediaType, mediaContent)
+        logs.add(`✅ ${mediaType} envoyé`)
+      }
+      // Texte seul
+      else {
+        console.log("💬 [3CX] Mode: Texte seul")
+        await sendDirectMessage("text", messageText)
+        logs.add("✅ Texte envoyé")
+      }
+
+      console.log("🎉 [3CX] Terminé")
+
+    } catch (error: any) {
+      console.error(`❌ [3CX] Erreur finale:`, error)
+      logs.add(`❌ Erreur: ${error.message}`)
+    }
+  },
+})
+
+function detectMediaType(url: string): string {
+  const lower = url.toLowerCase()
+  if (lower.match(/\.(jpg|jpeg|png|gif|webp)(\?|$)/i)) return "image"
+  if (lower.match(/\.(mp4|mov|avi|webm)(\?|$)/i)) return "video"
+  if (lower.match(/\.(mp3|wav|ogg|m4a|aac)(\?|$)/i)) return "audio"
+  return "document"
+}
+
+function buildMediaContent(type: string, url: string, caption?: string): any {
+  const content: any = { link: url }
+  
+  if ((type === "image" || type === "video" || type === "document") && caption?.trim()) {
+    content.caption = caption
+  }
+  
+  if (type === "document") {
+    try {
+      const urlObj = new URL(url)
+      const filename = urlObj.pathname.split('/').pop() || 'document'
+      content.filename = decodeURIComponent(filename)
+    } catch {
+      content.filename = 'document'
+    }
+  }
+  
+  return content
+}

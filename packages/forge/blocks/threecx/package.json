@@ -1,0 +1,31 @@
+{
+  "name": "@typebot.io/threecx-block",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./schemas": {
+      "types": "./dist/schemas.d.ts",
+      "default": "./dist/schemas.js"
+    },
+    "./handlers": {
+      "types": "./dist/handlers/index.d.ts",
+      "default": "./dist/handlers/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@typebot.io/forge": "workspace:*",
+    "ky": "^1.2.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
