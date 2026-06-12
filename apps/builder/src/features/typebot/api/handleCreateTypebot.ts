@@ -78,7 +78,7 @@ export const handleCreateTypebot = async ({
     data: {
       version: latestTypebotVersion,
       workspaceId,
-      name: typebot.name ?? "My typebot",
+      name: typebot.name ?? "My bot",
       icon: typebot.icon,
       selectedThemeTemplateId: typebot.selectedThemeTemplateId,
       groups,

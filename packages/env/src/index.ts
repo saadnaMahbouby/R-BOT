@@ -283,7 +283,7 @@ const s3Env = {
   server: {
     S3_ACCESS_KEY: z.string().min(1).optional(),
     S3_SECRET_KEY: z.string().min(1).optional(),
-    S3_BUCKET: z.string().min(1).optional().default("typebot"),
+    S3_BUCKET: z.string().min(1).optional().default("bot"),
     S3_PORT: z.coerce.number().optional(),
     S3_ENDPOINT: z.string().min(1).optional(),
     S3_SSL: boolean.optional().default("true"),
