@@ -35,7 +35,7 @@ const main = async () => {
 
   const existing = await prisma.user.findUnique({
     where: { email: normalizedEmail },
-    select: { id: true, workspaces: { select: { id: true } } },
+    select: { id: true, workspaces: { select: { workspaceId: true } } },
   });
 
   if (existing) {
