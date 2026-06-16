@@ -73,6 +73,10 @@ ENV TURBO_TELEMETRY_DISABLED=1
 ENV NEXT_TELEMETRY_DISABLED=1
 ARG SCOPE
 ENV SCOPE=${SCOPE}
+# ffmpeg: used to convert GIFs to MP4 for WhatsApp
+RUN apt-get -qy update \
+  && apt-get -qy --no-install-recommends install ffmpeg \
+  && rm -rf /var/lib/apt/lists/*
 # Create non-root user (recommended)
 RUN groupadd -g 1001 nodejs \
   && useradd -m -u 1001 -g 1001 -s /bin/sh nextjs

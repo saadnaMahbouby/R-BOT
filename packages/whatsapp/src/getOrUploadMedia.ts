@@ -4,6 +4,7 @@ import type { WhatsAppCredentials } from "@typebot.io/credentials/schemas";
 import { env } from "@typebot.io/env";
 import { ky } from "@typebot.io/lib/ky";
 import { ChatProvider } from "@typebot.io/prisma/enum";
+import { convertGifToMp4 } from "./convertGifToMp4";
 import { dialog360AuthHeaderName, dialog360BaseUrl } from "./constants";
 
 export type UploadMediaCache = {
@@ -49,12 +50,22 @@ export const getOrUploadMedia = async ({
     const arrayBuffer = await response.arrayBuffer();
 
     // Get the MIME type from the response headers
-    const mimeType =
+    let mimeType =
       response.headers.get("content-type") ?? "application/octet-stream";
+
+    // WhatsApp doesn't accept GIFs: convert them to MP4 on the fly.
+    let fileBuffer: Uint8Array = new Uint8Array(arrayBuffer);
+    const isGif =
+      urlWithoutQueryParams.toLowerCase().endsWith(".gif") ||
+      mimeType === "image/gif";
+    if (isGif) {
+      fileBuffer = await convertGifToMp4(Buffer.from(fileBuffer));
+      mimeType = "video/mp4";
+    }
 
     // Upload to WhatsApp
     const formData = new FormData();
-    const fileBlob = new Blob([arrayBuffer], { type: mimeType });
+    const fileBlob = new Blob([new Uint8Array(fileBuffer)], { type: mimeType });
     formData.append("file", fileBlob);
     formData.append("type", mimeType);
     formData.append("messaging_product", "whatsapp");

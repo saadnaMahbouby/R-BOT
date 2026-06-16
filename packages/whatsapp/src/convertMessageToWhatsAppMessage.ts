@@ -42,16 +42,17 @@ export const convertMessageToWhatsAppMessage = async ({
         return null;
       const caption = message.content.caption?.trim() || undefined;
 
-      // WhatsApp can't display an animated GIF as an "image", so we send it as a video instead.
+      // WhatsApp can't display an animated GIF, so getOrUploadMedia converts it
+      // to MP4 and we send it as a video. Without credentials we can't convert,
+      // so we skip it rather than send a broken message.
       if (isGifFileUrl(message.content.url)) {
-        if (mediaCache) {
-          const mediaId = await getOrUploadMedia({
-            url: message.content.url,
-            cache: mediaCache,
-          });
-          if (mediaId) return { type: "video", video: { id: mediaId, caption } };
-        }
-        return { type: "video", video: { link: message.content.url, caption } };
+        if (!mediaCache) return null;
+        const mediaId = await getOrUploadMedia({
+          url: message.content.url,
+          cache: mediaCache,
+        });
+        if (mediaId) return { type: "video", video: { id: mediaId, caption } };
+        return null;
       }
 
       if (mediaCache) {
