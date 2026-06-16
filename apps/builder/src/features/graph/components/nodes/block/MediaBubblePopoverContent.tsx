@@ -60,6 +60,7 @@ export const MediaBubbleContent = ({
       return (
         <EmbedBubbleSettings
           content={block.content}
+          uploadFileProps={uploadFileProps}
           onSubmit={onContentChange}
         />
       );

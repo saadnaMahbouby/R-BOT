@@ -12,10 +12,16 @@ import { orpc } from "@/lib/queryClient";
 import { toast } from "@/lib/toast";
 
 type UploadButtonProps = {
-  fileType: "image" | "audio";
+  fileType: "image" | "audio" | "document";
   filePathProps: FilePathUploadProps;
   onFileUploaded: (url: string) => void;
 } & ButtonProps;
+
+const acceptByFileType = {
+  image: "image/avif, image/*",
+  audio: "audio/*",
+  document: undefined,
+} as const;
 
 export const UploadButton = ({
   fileType,
@@ -66,7 +72,7 @@ export const UploadButton = ({
       return toast({
         description: "Could not read file.",
       });
-    setFile(await compressFile(file));
+    setFile(fileType === "image" ? await compressFile(file) : file);
     mutate({
       filePathProps,
       fileType: file.type,
@@ -81,7 +87,7 @@ export const UploadButton = ({
         id={`file-input-${id}`}
         className="hidden"
         onChange={handleInputChange}
-        accept={fileType === "image" ? "image/avif, image/*" : "audio/*"}
+        accept={acceptByFileType[fileType]}
       />
       <label
         htmlFor={`file-input-${id}`}

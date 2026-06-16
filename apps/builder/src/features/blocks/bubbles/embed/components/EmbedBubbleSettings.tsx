@@ -5,16 +5,23 @@ import { sanitizeUrl } from "@typebot.io/lib/utils";
 import { Field } from "@typebot.io/ui/components/Field";
 import { Switch } from "@typebot.io/ui/components/Switch";
 import type { Variable } from "@typebot.io/variables/schemas";
+import { UploadButton } from "@/components/ImageUploadContent/UploadButton";
 import { BasicNumberInput } from "@/components/inputs/BasicNumberInput";
 import { DebouncedTextInputWithVariablesButton } from "@/components/inputs/DebouncedTextInput";
 import { VariablesCombobox } from "@/components/inputs/VariablesCombobox";
+import type { FilePathUploadProps } from "@/features/upload/api/generateUploadUrl";
 
 type Props = {
   content: EmbedBubbleBlock["content"];
+  uploadFileProps: FilePathUploadProps;
   onSubmit: (content: EmbedBubbleBlock["content"]) => void;
 };
 
-export const EmbedBubbleSettings = ({ content, onSubmit }: Props) => {
+export const EmbedBubbleSettings = ({
+  content,
+  uploadFileProps,
+  onSubmit,
+}: Props) => {
   const { t } = useTranslate();
   const handleUrlChange = (url: string) => {
     const iframeUrl = sanitizeUrl(
@@ -56,6 +63,16 @@ export const EmbedBubbleSettings = ({ content, onSubmit }: Props) => {
           defaultValue={content?.url ?? ""}
           onValueChange={handleUrlChange}
         />
+        <div className="flex justify-center py-1">
+          <UploadButton
+            fileType="document"
+            filePathProps={uploadFileProps}
+            onFileUploaded={(url) => onSubmit({ ...content, url })}
+            variant="outline-secondary"
+          >
+            Uploader un fichier
+          </UploadButton>
+        </div>
         <p className="text-sm text-center" color="gray.400">
           {t("editor.blocks.bubbles.embed.settings.worksWith.text")}
         </p>
