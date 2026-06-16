@@ -40,6 +40,19 @@ export const convertMessageToWhatsAppMessage = async ({
     case BubbleBlockType.IMAGE: {
       if (!message.content.url || isImageUrlNotCompatible(message.content.url))
         return null;
+      const caption = message.content.caption?.trim() || undefined;
+
+      // WhatsApp can't display an animated GIF as an "image", so we send it as a video instead.
+      if (isGifFileUrl(message.content.url)) {
+        if (mediaCache) {
+          const mediaId = await getOrUploadMedia({
+            url: message.content.url,
+            cache: mediaCache,
+          });
+          if (mediaId) return { type: "video", video: { id: mediaId, caption } };
+        }
+        return { type: "video", video: { link: message.content.url, caption } };
+      }
 
       if (mediaCache) {
         const mediaId = await getOrUploadMedia({
@@ -52,6 +65,7 @@ export const convertMessageToWhatsAppMessage = async ({
             type: "image",
             image: {
               id: mediaId,
+              caption,
             },
           };
         }
@@ -61,6 +75,7 @@ export const convertMessageToWhatsAppMessage = async ({
         type: "image",
         image: {
           link: message.content.url,
+          caption,
         },
       };
     }
@@ -189,7 +204,7 @@ export const convertMessageToWhatsAppMessage = async ({
 };
 
 export const isImageUrlNotCompatible = (url: string) =>
-  !isHttpUrl(url) || isGifFileUrl(url) || isSvgSrc(url);
+  !isHttpUrl(url) || isSvgSrc(url);
 
 export const isHttpUrl = (text: string) =>
   text.startsWith("http://") || text.startsWith("https://");

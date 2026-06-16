@@ -130,6 +130,7 @@ export const TextBubbleEditor = ({
         </div>
         <Separator className="-mb-0.5" />
         <PlateContent
+          dir="auto"
           onKeyDown={handleKeyDown}
           autoFocus
           onClick={() => {

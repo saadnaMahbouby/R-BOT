@@ -2,7 +2,7 @@ import { env } from "@typebot.io/env";
 import { authenticator } from "otplib";
 import QRCode from "qrcode";
 
-const issuer = "Typebot";
+const issuer = "Bot";
 const encryptionAlgorithm = "AES-GCM";
 
 authenticator.options = { window: 1 };

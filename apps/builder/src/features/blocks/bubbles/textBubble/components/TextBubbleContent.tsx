@@ -10,6 +10,7 @@ export const TextBubbleContent = ({ block }: Props) => {
   const isEmpty = (block.content?.richText?.length ?? 0) === 0;
   return (
     <div
+      dir="auto"
       className={cx(
         "flex w-[90%] flex-col slate-html-container",
         isEmpty ? "opacity-50 text-gray-9" : "opacity-100",

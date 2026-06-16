@@ -29,6 +29,10 @@ export const ImageBubbleSettings = ({
     onContentChange({ ...block.content, url });
   };
 
+  const updateCaption = (caption: string) => {
+    onContentChange({ ...block.content, caption });
+  };
+
   const updateClickLinkUrl = (url: string) => {
     onContentChange({
       ...block.content,
@@ -62,6 +66,14 @@ export const ImageBubbleSettings = ({
           icon: true,
         }}
       />
+      <Field.Root>
+        <Field.Label>Légende (WhatsApp)</Field.Label>
+        <DebouncedTextInputWithVariablesButton
+          placeholder="Texte affiché sous l'image…"
+          onValueChange={updateCaption}
+          defaultValue={block.content?.caption}
+        />
+      </Field.Root>
       <div className="flex flex-col gap-2">
         <Field.Root className="flex-row items-center">
           <Switch

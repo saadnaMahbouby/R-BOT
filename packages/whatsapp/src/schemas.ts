@@ -5,6 +5,7 @@ const mediaSchema = z
   .object({
     link: z.string().optional(),
     id: z.string().optional(),
+    caption: z.string().optional(),
   })
   .refine((data) => data.link || data.id, {
     message: "Either link or id must be provided",

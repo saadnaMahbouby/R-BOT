@@ -39,21 +39,21 @@ export const PlateElement = (props: Props) => {
               </a>
             </Match>
             <Match when={elementDescendant.type === "ol"}>
-              <ol>
+              <ol dir="auto">
                 <For each={elementDescendant.children}>
                   {(child) => <PlateElement element={child} />}
                 </For>
               </ol>
             </Match>
             <Match when={props.element.type === "ul"}>
-              <ul>
+              <ul dir="auto">
                 <For each={elementDescendant.children}>
                   {(child) => <PlateElement element={child} />}
                 </For>
               </ul>
             </Match>
             <Match when={props.element.type === "li"}>
-              <li>
+              <li dir="auto">
                 <For each={elementDescendant.children}>
                   {(child) => <PlateElement element={child} />}
                 </For>
@@ -70,7 +70,7 @@ export const PlateElement = (props: Props) => {
               <br />
             </Match>
             <Match when={true}>
-              <div data-element-type={props.element.type}>
+              <div data-element-type={props.element.type} dir="auto">
                 <For each={elementDescendant.children}>
                   {(child) => <PlateElement element={child} />}
                 </For>
