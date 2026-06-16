@@ -12,7 +12,7 @@ import { orpc } from "@/lib/queryClient";
 import { toast } from "@/lib/toast";
 
 type UploadButtonProps = {
-  fileType: "image" | "audio" | "document";
+  fileType: "image" | "audio" | "video" | "document";
   filePathProps: FilePathUploadProps;
   onFileUploaded: (url: string) => void;
 } & ButtonProps;
@@ -20,6 +20,7 @@ type UploadButtonProps = {
 const acceptByFileType = {
   image: "image/avif, image/*",
   audio: "audio/*",
+  video: "video/*",
   document: undefined,
 } as const;
 

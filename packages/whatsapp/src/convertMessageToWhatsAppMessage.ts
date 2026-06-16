@@ -33,7 +33,7 @@ export const convertMessageToWhatsAppMessage = async ({
       return {
         type: "text",
         text: {
-          body,
+          body: applyPerLineTextDirection(body),
         },
       };
     }
@@ -107,6 +107,7 @@ export const convertMessageToWhatsAppMessage = async ({
     case BubbleBlockType.VIDEO:
       if (!message.content.url) return null;
       if (message.content.type === VideoBubbleContentType.URL) {
+        const videoCaption = message.content.caption?.trim() || undefined;
         // Try to pre-upload media if credentials are provided
         if (mediaCache) {
           const mediaId = await getOrUploadMedia({
@@ -119,6 +120,7 @@ export const convertMessageToWhatsAppMessage = async ({
               type: "video",
               video: {
                 id: mediaId,
+                caption: videoCaption,
               },
             };
           }
@@ -129,6 +131,7 @@ export const convertMessageToWhatsAppMessage = async ({
           type: "video",
           video: {
             link: message.content.url,
+            caption: videoCaption,
           },
         };
       }
@@ -202,6 +205,24 @@ export const convertMessageToWhatsAppMessage = async ({
       };
   }
 };
+
+const rtlCharRegex =
+  /[؀-ۿݐ-ݿࢠ-ࣿﭐ-﷿ﹰ-﻿]/;
+const rightToLeftMark = "‏";
+const leftToRightMark = "‎";
+
+// WhatsApp aligns a whole message by its first strong character, so a leading
+// Arabic line forces the whole message to the right. We prepend a per-line
+// directional mark so each line (Arabic vs Latin) keeps its own alignment.
+export const applyPerLineTextDirection = (text: string): string =>
+  text
+    .split("\n")
+    .map((line) =>
+      line.trim().length === 0
+        ? line
+        : (rtlCharRegex.test(line) ? rightToLeftMark : leftToRightMark) + line,
+    )
+    .join("\n");
 
 export const isImageUrlNotCompatible = (url: string) =>
   !isHttpUrl(url) || isSvgSrc(url);

@@ -7,6 +7,7 @@ import { VideoBubbleContentType } from "./constants";
 export const videoBubbleContentSchema = z.object({
   url: z.string().optional(),
   id: z.string().optional(),
+  caption: z.string().optional(),
   type: z.nativeEnum(VideoBubbleContentType).optional(),
   height: singleVariableOrNumberSchema.optional(),
   aspectRatio: z.string().optional(),
