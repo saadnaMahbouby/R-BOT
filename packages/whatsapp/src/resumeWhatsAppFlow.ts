@@ -253,6 +253,10 @@ const convertWhatsAppMessageToTypebotMessage = async ({
             append(message.interactive.list_reply.title);
             break;
           }
+          case "nfm_reply": {
+            append(message.interactive.nfm_reply.response_json);
+            break;
+          }
         }
         break;
       }

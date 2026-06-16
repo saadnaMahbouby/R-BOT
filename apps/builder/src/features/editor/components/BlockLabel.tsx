@@ -62,6 +62,7 @@ export const getInputBlockLabel = (
   [InputBlockType.FILE]: t("editor.sidebarBlock.file.label"),
   [InputBlockType.TIME]: "Time",
   [InputBlockType.CARDS]: "Cards",
+  [InputBlockType.WHATSAPP_FLOW]: "WhatsApp Flow",
 });
 
 export const getLogicBlockLabel = (

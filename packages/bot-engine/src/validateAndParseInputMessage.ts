@@ -178,5 +178,9 @@ export const validateAndParseInputMessage = (
         replyId: message.metadata?.replyId,
       });
     }
+    case InputBlockType.WHATSAPP_FLOW: {
+      if (!message || message.type !== "text") return { status: "fail" };
+      return { status: "success", content: message.text };
+    }
   }
 };

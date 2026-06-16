@@ -19,6 +19,7 @@ import { ratingInputBlockSchema } from "@typebot.io/blocks-inputs/rating/schema"
 import { textInputSchema } from "@typebot.io/blocks-inputs/text/schema";
 import { timeInputSchema } from "@typebot.io/blocks-inputs/time/schema";
 import { urlInputSchema } from "@typebot.io/blocks-inputs/url/schema";
+import { whatsAppFlowBlockSchema } from "@typebot.io/blocks-inputs/whatsappFlow/schema";
 import { logInSessionSchema } from "@typebot.io/logs/schemas";
 import { settingsSchema } from "@typebot.io/settings/schemas";
 import { dynamicThemeSchema, themeSchema } from "@typebot.io/theme/schemas";
@@ -296,6 +297,7 @@ const chatResponseBaseSchema = z.object({
         fileInputBlockSchemas.v6,
         pictureChoiceBlockSchemas.v6,
         cardsBlockSchema,
+        whatsAppFlowBlockSchema,
       ]),
       z.discriminatedUnion("type", [
         buttonsInputSchemas.v5,

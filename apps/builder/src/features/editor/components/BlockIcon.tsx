@@ -129,6 +129,10 @@ export const BlockIcon = ({ type, className }: BlockIconProps): JSX.Element => {
           className={cn("text-orange-9 stroke-2", className)}
         />
       );
+    case InputBlockType.WHATSAPP_FLOW:
+      return (
+        <FileInputIcon className={cn("text-orange-9 stroke-2", className)} />
+      );
     case LogicBlockType.SET_VARIABLE:
       return (
         <SetVariableIcon className={cn("text-purple-9 stroke-2", className)} />

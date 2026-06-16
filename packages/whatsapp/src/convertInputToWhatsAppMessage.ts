@@ -44,6 +44,45 @@ export const convertInputToWhatsAppMessages = async ({
     case InputBlockType.RATING:
     case InputBlockType.TEXT:
       return [];
+    case InputBlockType.WHATSAPP_FLOW: {
+      const flowId = input.options?.flowId;
+      if (!flowId) return [];
+      let flowActionPayload: Record<string, unknown> | undefined;
+      if (input.options?.screen || input.options?.flowActionPayload) {
+        flowActionPayload = {};
+        if (input.options.screen) flowActionPayload.screen = input.options.screen;
+        if (input.options.flowActionPayload) {
+          try {
+            flowActionPayload.data = JSON.parse(input.options.flowActionPayload);
+          } catch {
+            // ignore invalid JSON payload
+          }
+        }
+      }
+      return [
+        {
+          type: "interactive",
+          interactive: {
+            type: "flow",
+            body: { text: input.options?.bodyText || lastMessageText || "―" },
+            action: {
+              name: "flow",
+              parameters: {
+                flow_message_version: "3",
+                flow_token: input.options?.flowToken || input.id,
+                flow_id: flowId,
+                flow_cta: input.options?.cta || "Ouvrir",
+                mode: input.options?.mode ?? "published",
+                flow_action: input.options?.screen ? "navigate" : "data_exchange",
+                ...(flowActionPayload
+                  ? { flow_action_payload: flowActionPayload }
+                  : {}),
+              },
+            },
+          },
+        },
+      ];
+    }
     case InputBlockType.PICTURE_CHOICE: {
       if (
         input.options?.isMultipleChoice ??

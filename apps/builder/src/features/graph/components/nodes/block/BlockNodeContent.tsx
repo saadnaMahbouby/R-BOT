@@ -112,6 +112,15 @@ export const BlockNodeContent = ({
     case InputBlockType.CARDS: {
       return <CardsBlockNode block={block} indices={indices} />;
     }
+    case InputBlockType.WHATSAPP_FLOW: {
+      return (
+        <span className="text-gray-9">
+          {block.options?.flowId
+            ? `WhatsApp Flow • ${block.options.flowId}`
+            : "Configurer le WhatsApp Flow"}
+        </span>
+      );
+    }
     case LogicBlockType.SET_VARIABLE: {
       return <SetVariableContent block={block} />;
     }

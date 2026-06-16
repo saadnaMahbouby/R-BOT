@@ -71,6 +71,19 @@ const listActionSchema = z.object({
   ),
 });
 
+const flowActionSchema = z.object({
+  name: z.literal("flow"),
+  parameters: z.object({
+    flow_message_version: z.string(),
+    flow_token: z.string().optional(),
+    flow_id: z.string(),
+    flow_cta: z.string(),
+    mode: z.enum(["published", "draft"]).optional(),
+    flow_action: z.string().optional(),
+    flow_action_payload: z.record(z.unknown()).optional(),
+  }),
+});
+
 const interactiveSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("button"),
@@ -83,6 +96,12 @@ const interactiveSchema = z.discriminatedUnion("type", [
     header: headerSchema.optional(),
     body: bodySchema.optional(),
     action: listActionSchema,
+  }),
+  z.object({
+    type: z.literal("flow"),
+    header: headerSchema.optional(),
+    body: bodySchema.optional(),
+    action: flowActionSchema,
   }),
 ]);
 
@@ -150,9 +169,19 @@ const incomingListReplySchema = z.object({
   }),
 });
 
+const incomingNfmReplySchema = z.object({
+  type: z.literal("nfm_reply"),
+  nfm_reply: z.object({
+    response_json: z.string(),
+    body: z.string().optional(),
+    name: z.string().optional(),
+  }),
+});
+
 const incomingInteractiveReplySchema = z.discriminatedUnion("type", [
   incomingButtonReplySchema,
   incomingListReplySchema,
+  incomingNfmReplySchema,
 ]);
 
 export const incomingMessageSchema = z.discriminatedUnion("type", [
