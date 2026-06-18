@@ -1,5 +1,7 @@
 #!/bin/bash
 
+node ./check-license.mjs || exit 1
+
 cd apps/viewer;
 node  -e "const { configureRuntimeEnv } = require('next-runtime-env/build/configure'); configureRuntimeEnv();"
 cd ../..;

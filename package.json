@@ -21,6 +21,8 @@
     "lint-repo:fix": "bun lint-repo --fix",
     "patch-embed-libs": "bun packages/scripts/src/patchEmbedLibs.ts && bun install",
     "create-admin": "cd packages/scripts && bun run createAdmin",
+    "license:keys": "node scripts/license-keys.mjs",
+    "license:generate": "node scripts/license-generate.mjs",
     "docker:build": "docker compose -f docker-compose.build.yml build",
     "docker:up": "docker compose -f docker-compose.build.yml up -d --build",
     "typecheck": "turbo run typecheck",

@@ -85,8 +85,9 @@ COPY --from=builder /app/apps/${SCOPE}/.next/standalone ./
 # Copy static + public assets
 COPY --from=builder /app/apps/${SCOPE}/.next/static ./apps/${SCOPE}/.next/static
 COPY --from=builder /app/apps/${SCOPE}/public ./apps/${SCOPE}/public
-# Entrypoint
+# Entrypoint + license check
 COPY scripts/${SCOPE}-entrypoint.sh ./
+COPY scripts/check-license.mjs ./check-license.mjs
 RUN chmod +x ./${SCOPE}-entrypoint.sh
 USER nextjs
 EXPOSE 3000
