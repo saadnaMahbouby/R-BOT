@@ -84,7 +84,7 @@ export const handleCreateInvitation = async ({
 
   await sendGuestInvitationEmail({
     hostEmail: user.email ?? "",
-    url: `${env.NEXTAUTH_URL}/typebots?workspaceId=${typebot.workspaceId}`,
+    url: `${env.NEXTAUTH_URL}/bots?workspaceId=${typebot.workspaceId}`,
     guestEmail: email.toLowerCase(),
     typebotName: typebot.name,
     workspaceName: typebot.workspace?.name ?? "",

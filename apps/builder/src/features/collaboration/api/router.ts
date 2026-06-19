@@ -42,7 +42,7 @@ export const collaboratorsRouter = {
   getCollaborators: authenticatedProcedure
     .route({
       method: "GET",
-      path: "/v1/typebots/{typebotId}/collaborators",
+      path: "/v1/bots/{typebotId}/collaborators",
       summary: "Get collaborators",
       tags: ["Collaborators"],
     })

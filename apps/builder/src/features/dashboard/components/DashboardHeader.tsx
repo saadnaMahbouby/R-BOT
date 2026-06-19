@@ -37,7 +37,7 @@ export const DashboardHeader = () => {
   return (
     <div className="flex w-full border-b justify-center bg-gray-1 dark:bg-gray-2">
       <div className="flex justify-between items-center h-16 flex-1 max-w-[1000px]">
-        <Link href="/typebots" data-testid="typebot-logo">
+        <Link href="/bots" data-testid="typebot-logo">
           <EmojiOrImageIcon
             icon={workspace?.icon}
             defaultIcon={HardDriveIcon}

@@ -12,7 +12,7 @@ export const analyticsRouter = {
   getInDepthAnalyticsData: authenticatedProcedure
     .route({
       method: "GET",
-      path: "/v1/typebots/{typebotId}/analytics/inDepthData",
+      path: "/v1/bots/{typebotId}/analytics/inDepthData",
       summary:
         "List total answers in blocks and off-default paths visited edges",
       tags: ["Analytics"],
@@ -29,7 +29,7 @@ export const analyticsRouter = {
   getStats: authenticatedProcedure
     .route({
       method: "GET",
-      path: "/v1/typebots/{typebotId}/analytics/stats",
+      path: "/v1/bots/{typebotId}/analytics/stats",
       summary: "Get results stats",
       tags: ["Analytics"],
     })

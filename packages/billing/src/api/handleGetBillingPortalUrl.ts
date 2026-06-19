@@ -46,7 +46,7 @@ export const handleGetBillingPortalUrl = async ({
   });
   const portalSession = await stripe.billingPortal.sessions.create({
     customer: workspace.stripeId,
-    return_url: `${env.NEXTAUTH_URL}/typebots`,
+    return_url: `${env.NEXTAUTH_URL}/bots`,
   });
   return {
     billingPortalUrl: portalSession.url,

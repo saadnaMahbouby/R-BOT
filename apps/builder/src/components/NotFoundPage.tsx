@@ -12,7 +12,7 @@ export const NotFoundPage = ({ resourceName }: Props) => {
           <h2>404</h2>
           <p className="text-xl">{resourceName} not found.</p>
         </div>
-        <ButtonLink href="/typebots">
+        <ButtonLink href="/bots">
           <ArrowLeft01Icon />
           Dashboard
         </ButtonLink>

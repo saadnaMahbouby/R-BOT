@@ -9,7 +9,7 @@ export const SharePopoverContent = () => {
   const { t } = useTranslate();
   const { typebot, updateTypebot } = useTypebot();
 
-  const currentUrl = `${window.location.origin}/typebots/${typebot?.id}/edit`;
+  const currentUrl = `${window.location.origin}/bots/${typebot?.id}/edit`;
 
   const updateIsPublicShareEnabled = async (isEnabled: boolean) => {
     await updateTypebot({

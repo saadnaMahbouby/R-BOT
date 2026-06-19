@@ -59,7 +59,7 @@ export const AdminUsersPage = () => {
   );
 
   useEffect(() => {
-    if (user && !isCurrentUserAdmin) router.replace("/typebots");
+    if (user && !isCurrentUserAdmin) router.replace("/bots");
   }, [user, isCurrentUserAdmin, router]);
 
   if (!user)
@@ -113,7 +113,7 @@ export const AdminUsersPage = () => {
       <Seo title="Gestion des utilisateurs" />
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Gestion des utilisateurs</h1>
-        <Button variant="outline-secondary" render={<Link href="/typebots" />}>
+        <Button variant="outline-secondary" render={<Link href="/bots" />}>
           Retour
         </Button>
       </div>

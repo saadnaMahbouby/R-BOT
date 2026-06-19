@@ -24,7 +24,7 @@ test("should pause and resume on webhook call", async ({ page, request }) => {
   await page.waitForTimeout(1000);
 
   const webhookResponse = await request.post(
-    `/api/v1/typebots/${typebotId}/blocks/${blockId}/results/${resultId}/executeWebhook`,
+    `/api/v1/bots/${typebotId}/blocks/${blockId}/results/${resultId}/executeWebhook`,
     {
       headers: {
         Authorization: `Bearer ${apiToken}`,

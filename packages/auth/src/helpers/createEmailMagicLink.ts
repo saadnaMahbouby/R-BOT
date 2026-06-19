@@ -8,7 +8,7 @@ export const createEmailMagicLink = (
   url.searchParams.set("email", email);
   url.searchParams.set(
     "callbackUrl",
-    `${window.location.origin}${redirectPath ?? "/typebots"}`,
+    `${window.location.origin}${redirectPath ?? "/bots"}`,
   );
   return url.toString();
 };

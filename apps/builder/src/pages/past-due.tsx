@@ -11,7 +11,7 @@ export default function Page() {
 
   useEffect(() => {
     if (!workspace || workspace.isPastDue) return;
-    replace("/typebots");
+    replace("/bots");
   }, [replace, workspace]);
 
   return (

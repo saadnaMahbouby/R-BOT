@@ -60,7 +60,7 @@ export const typebotRouter = {
   createTypebot: authenticatedProcedure
     .route({
       method: "POST",
-      path: "/v1/typebots",
+      path: "/v1/bots",
       tags: ["Typebot"],
       summary: "Create a typebot",
     })
@@ -71,7 +71,7 @@ export const typebotRouter = {
   getTypebot: publicProcedureWithOptionalUser
     .route({
       method: "GET",
-      path: "/v1/typebots/{typebotId}",
+      path: "/v1/bots/{typebotId}",
       tags: ["Typebot"],
       summary: "Get a typebot",
     })
@@ -87,7 +87,7 @@ export const typebotRouter = {
   updateTypebot: authenticatedProcedure
     .route({
       method: "PATCH",
-      path: "/v1/typebots/{typebotId}",
+      path: "/v1/bots/{typebotId}",
       tags: ["Typebot"],
       summary: "Update a typebot",
     })
@@ -98,7 +98,7 @@ export const typebotRouter = {
   deleteTypebot: authenticatedProcedure
     .route({
       method: "DELETE",
-      path: "/v1/typebots/{typebotId}",
+      path: "/v1/bots/{typebotId}",
       summary: "Delete a typebot",
       tags: ["Typebot"],
     })
@@ -109,7 +109,7 @@ export const typebotRouter = {
   listTypebots: authenticatedProcedure
     .route({
       method: "GET",
-      path: "/v1/typebots",
+      path: "/v1/bots",
       summary: "List typebots",
       tags: ["Typebot"],
     })
@@ -137,7 +137,7 @@ export const typebotRouter = {
   publishTypebot: authenticatedProcedure
     .route({
       method: "POST",
-      path: "/v1/typebots/{typebotId}/publish",
+      path: "/v1/bots/{typebotId}/publish",
       summary: "Publish a typebot",
       tags: ["Typebot"],
     })
@@ -153,7 +153,7 @@ export const typebotRouter = {
   unpublishTypebot: authenticatedProcedure
     .route({
       method: "POST",
-      path: "/v1/typebots/{typebotId}/unpublish",
+      path: "/v1/bots/{typebotId}/unpublish",
       summary: "Unpublish a typebot",
       tags: ["Typebot"],
     })
@@ -164,7 +164,7 @@ export const typebotRouter = {
   getPublishedTypebot: authenticatedProcedure
     .route({
       method: "GET",
-      path: "/v1/typebots/{typebotId}/publishedTypebot",
+      path: "/v1/bots/{typebotId}/publishedTypebot",
       summary: "Get published typebot",
       tags: ["Typebot"],
     })
@@ -188,7 +188,7 @@ export const typebotRouter = {
   importTypebot: authenticatedProcedure
     .route({
       method: "POST",
-      path: "/v1/typebots/import",
+      path: "/v1/bots/import",
       summary: "Import a typebot",
       tags: ["Typebot"],
     })

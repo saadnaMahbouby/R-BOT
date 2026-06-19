@@ -50,7 +50,7 @@ export const SignInForm = ({ defaultEmail }: Props) => {
 
   useEffect(() => {
     if (status === "authenticated")
-      router.replace(redirectPath ? sanitizeUrl(redirectPath) : "/typebots");
+      router.replace(redirectPath ? sanitizeUrl(redirectPath) : "/bots");
   }, [status, router, redirectPath]);
 
   const handleCredentialsSubmit = (e: FormEvent) => {
@@ -68,7 +68,7 @@ export const SignInForm = ({ defaultEmail }: Props) => {
     });
     setIsVerifying(false);
     if (response?.ok)
-      router.replace(redirectPath ? sanitizeUrl(redirectPath) : "/typebots");
+      router.replace(redirectPath ? sanitizeUrl(redirectPath) : "/bots");
     else
       toast({
         description:

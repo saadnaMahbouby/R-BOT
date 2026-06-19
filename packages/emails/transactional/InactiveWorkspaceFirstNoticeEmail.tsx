@@ -49,7 +49,7 @@ export const InactiveWorkspaceFirstNoticeEmail = ({
         <Text style={paragraph}>
           To keep your workspace active, just{" "}
           <Link
-            href={`${env.NEXTAUTH_URL}/typebots?workspaceId=${workspaceId}`}
+            href={`${env.NEXTAUTH_URL}/bots?workspaceId=${workspaceId}`}
           >
             log in to your Typebot account
           </Link>{" "}

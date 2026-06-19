@@ -44,7 +44,7 @@ export const ApiDeployDialog = ({
                 lang={"shell"}
                 value={`${parseApiHost(
                   typebot?.customDomain,
-                )}/api/v1/typebots/${publicId}/startChat`}
+                )}/api/v1/bots/${publicId}/startChat`}
               />
             </div>
           </li>

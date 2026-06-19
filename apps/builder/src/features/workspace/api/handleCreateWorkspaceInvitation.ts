@@ -74,7 +74,7 @@ export const handleCreateWorkspaceInvitation = async ({
     await sendWorkspaceMemberInvitationEmail({
       workspaceName: workspace.name,
       guestEmail: email,
-      url: `${env.NEXTAUTH_URL}/typebots?workspaceId=${workspace.id}`,
+      url: `${env.NEXTAUTH_URL}/bots?workspaceId=${workspace.id}`,
       hostEmail: user.email ?? "",
     });
 
@@ -96,7 +96,7 @@ export const handleCreateWorkspaceInvitation = async ({
   await sendWorkspaceMemberInvitationEmail({
     workspaceName: workspace.name,
     guestEmail: email,
-    url: `${env.NEXTAUTH_URL}/typebots?workspaceId=${workspace.id}`,
+    url: `${env.NEXTAUTH_URL}/bots?workspaceId=${workspace.id}`,
     hostEmail: user.email ?? "",
   });
 

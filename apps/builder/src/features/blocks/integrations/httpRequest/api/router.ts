@@ -26,7 +26,7 @@ export const httpRequestRouter = {
   listHttpRequestBlocks: authenticatedProcedure
     .route({
       method: "GET",
-      path: "/v1/typebots/{typebotId}/webhookBlocks",
+      path: "/v1/bots/{typebotId}/webhookBlocks",
       summary: "List HTTP request blocks",
       description:
         "Returns a list of all the HTTP request blocks that you can subscribe to.",
@@ -55,7 +55,7 @@ export const httpRequestRouter = {
   getResultExample: authenticatedProcedure
     .route({
       method: "GET",
-      path: "/v1/typebots/{typebotId}/webhookBlocks/{blockId}/getResultExample",
+      path: "/v1/bots/{typebotId}/webhookBlocks/{blockId}/getResultExample",
       summary: "Get result example",
       description:
         'Returns "fake" result for http request block to help you anticipate how the webhook will behave.',
@@ -74,7 +74,7 @@ export const httpRequestRouter = {
   subscribeHttpRequest: authenticatedProcedure
     .route({
       method: "POST",
-      path: "/v1/typebots/{typebotId}/webhookBlocks/{blockId}/subscribe",
+      path: "/v1/bots/{typebotId}/webhookBlocks/{blockId}/subscribe",
       summary: "Subscribe to HTTP request block",
       tags: ["HTTP request"],
     })
@@ -90,7 +90,7 @@ export const httpRequestRouter = {
   unsubscribeHttpRequest: authenticatedProcedure
     .route({
       method: "POST",
-      path: "/v1/typebots/{typebotId}/webhookBlocks/{blockId}/unsubscribe",
+      path: "/v1/bots/{typebotId}/webhookBlocks/{blockId}/unsubscribe",
       summary: "Unsubscribe from HTTP request block",
       tags: ["HTTP request"],
     })

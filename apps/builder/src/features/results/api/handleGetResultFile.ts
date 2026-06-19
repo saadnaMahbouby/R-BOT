@@ -48,7 +48,7 @@ export const handleGetResultFile = async ({
     throw new ORPCError("NOT_FOUND", { message: "Workspace not found" });
 
   const tmpUrl = await getFileTempUrl({
-    key: `private/workspaces/${typebot.workspace.id}/typebots/${typebotId}/results/${resultId}/${fileName}`,
+    key: `private/workspaces/${typebot.workspace.id}/bots/${typebotId}/results/${resultId}/${fileName}`,
   });
 
   if (!tmpUrl) throw new ORPCError("NOT_FOUND", { message: "File not found" });

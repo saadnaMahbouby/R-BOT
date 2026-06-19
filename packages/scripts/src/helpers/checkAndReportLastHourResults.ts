@@ -176,7 +176,7 @@ export const checkAndReportLastHourResults = async () => {
                 to: adminEmails,
                 workspaceName: workspace.name,
                 totalChatsUsed,
-                url: `${process.env.NEXTAUTH_URL}/typebots?workspaceId=${workspace.id}`,
+                url: `${process.env.NEXTAUTH_URL}/bots?workspaceId=${workspace.id}`,
               });
               billingCycleResetEvents.push(
                 ...adminMembers.map((member) => ({
@@ -479,7 +479,7 @@ async function sendLimitWarningEmails({
       await sendReachedChatsLimitEmail({
         to,
         chatsLimit: limit,
-        url: `${env.NEXTAUTH_URL}/typebots?workspaceId=${workspace.id}`,
+        url: `${env.NEXTAUTH_URL}/bots?workspaceId=${workspace.id}`,
       });
       emailEvents.push(
         ...adminMembers.map((m) => ({

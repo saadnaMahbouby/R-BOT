@@ -19,7 +19,7 @@ const Page = () => {
   const { mutate, status } = useMutation(
     orpc.typebot.importTypebot.mutationOptions({
       onSuccess: (data) => {
-        push(`/typebots/${data.typebot.id}/edit`);
+        push(`/bots/${data.typebot.id}/edit`);
       },
     }),
   );

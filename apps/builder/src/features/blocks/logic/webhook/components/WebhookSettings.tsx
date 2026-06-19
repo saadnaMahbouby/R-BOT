@@ -85,7 +85,7 @@ export const WebhookSettings = ({
   );
 
   const urlBase = typebot
-    ? `${env.NEXT_PUBLIC_VIEWER_URL[0]}/api/v1/typebots/${typebot.id}/blocks/${blockId}`
+    ? `${env.NEXT_PUBLIC_VIEWER_URL[0]}/api/v1/bots/${typebot.id}/blocks/${blockId}`
     : "";
 
   return (

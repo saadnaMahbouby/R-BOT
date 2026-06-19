@@ -143,10 +143,10 @@ const LeftElements = ({
           aria-label="Navigate back"
           href={{
             pathname: router.query.parentId
-              ? "/typebots/[typebotId]/edit"
+              ? "/bots/[typebotId]/edit"
               : typebot?.folderId
-                ? "/typebots/folders/[id]"
-                : "/typebots",
+                ? "/bots/folders/[id]"
+                : "/bots",
             query: {
               id: typebot?.folderId ?? [],
               parentId: Array.isArray(router.query.parentId)
@@ -285,7 +285,7 @@ const RightElements = ({
       )}
       {currentUserMode === "guest" && (
         <ButtonLink
-          href={`/typebots/${typebot?.id}/duplicate`}
+          href={`/bots/${typebot?.id}/duplicate`}
           disabled={isNotDefined(typebot)}
           variant="secondary"
           size="sm"
@@ -314,28 +314,28 @@ const TypebotNav = ({
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <ButtonLink
-        href={`/typebots/${typebotId}/edit`}
+        href={`/bots/${typebotId}/edit`}
         variant={router.pathname.includes("/edit") ? "outline" : "ghost"}
         size="sm"
       >
         {t("editor.header.flowButton.label")}
       </ButtonLink>
       <ButtonLink
-        href={`/typebots/${typebotId}/theme`}
+        href={`/bots/${typebotId}/theme`}
         variant={router.pathname.endsWith("theme") ? "outline" : "ghost"}
         size="sm"
       >
         {t("editor.header.themeButton.label")}
       </ButtonLink>
       <ButtonLink
-        href={`/typebots/${typebotId}/settings`}
+        href={`/bots/${typebotId}/settings`}
         variant={router.pathname.endsWith("settings") ? "outline" : "ghost"}
         size="sm"
       >
         {t("editor.header.settingsButton.label")}
       </ButtonLink>
       <ButtonLink
-        href={`/typebots/${typebotId}/share`}
+        href={`/bots/${typebotId}/share`}
         variant={router.pathname.endsWith("share") ? "outline" : "ghost"}
         size="sm"
       >
@@ -343,7 +343,7 @@ const TypebotNav = ({
       </ButtonLink>
       {isResultsDisplayed && (
         <ButtonLink
-          href={`/typebots/${typebotId}/results`}
+          href={`/bots/${typebotId}/results`}
           variant={router.pathname.includes("results") ? "outline" : "ghost"}
           size="sm"
         >

@@ -27,7 +27,7 @@ export const SocialLoginButtons = ({ providers }: Props) => {
     await signIn(provider, {
       callbackUrl:
         query.callbackUrl?.toString() ??
-        `/typebots?${stringify(omit(query, "error", "callbackUrl"))}`,
+        `/bots?${stringify(omit(query, "error", "callbackUrl"))}`,
     });
     setTimeout(() => setAuthLoading(undefined), 3000);
   };

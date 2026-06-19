@@ -44,7 +44,7 @@ test("API chat execution should work on preview bot", async ({ request }) => {
 
   await test.step("Can start and continue chat", async () => {
     const { sessionId, messages, input, resultId } = await (
-      await request.post(`/api/v1/typebots/${typebotId}/preview/startChat`, {
+      await request.post(`/api/v1/bots/${typebotId}/preview/startChat`, {
         data: {
           isOnlyRegistering: false,
           isStreamEnabled: false,
@@ -98,7 +98,7 @@ test("API chat execution should work on published bot", async ({ request }) => {
 
   await test.step("Start the chat", async () => {
     const { sessionId, messages, input, resultId } = await (
-      await request.post(`/api/v1/typebots/${publicId}/startChat`, {
+      await request.post(`/api/v1/bots/${publicId}/startChat`, {
         data: {
           isOnlyRegistering: false,
           isStreamEnabled: false,
@@ -258,7 +258,7 @@ test("API chat execution should work on published bot", async ({ request }) => {
   await test.step("Starting with a message when typebot starts with input should proceed", async () => {
     const response = await (
       await request.post(
-        `/api/v1/typebots/starting-with-input-public/startChat`,
+        `/api/v1/bots/starting-with-input-public/startChat`,
         {
           data: {
             //@ts-expect-error We want to test if message is correctly preprocessed by zod
@@ -283,7 +283,7 @@ test("API chat execution should work on published bot", async ({ request }) => {
   });
   await test.step("Markdown text bubble format should work", async () => {
     const { messages } = await (
-      await request.post(`/api/v1/typebots/${typebotId}/preview/startChat`, {
+      await request.post(`/api/v1/bots/${typebotId}/preview/startChat`, {
         data: {
           isOnlyRegistering: false,
           isStreamEnabled: false,

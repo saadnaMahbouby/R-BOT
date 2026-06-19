@@ -31,21 +31,21 @@ export const GuestTypebotHeader = () => {
     <div className="flex w-full border-b justify-center items-center relative h-(--header-height) bg-gray-1 shrink-0 z-10">
       <div className="items-center gap-2 absolute xl:static right-[280px] xl:right-0 hidden sm:flex">
         <ButtonLink
-          href={`/typebots/${typebot?.id}/edit`}
+          href={`/bots/${typebot?.id}/edit`}
           variant={router.pathname.includes("/edit") ? "outline" : "ghost"}
           size="sm"
         >
           {t("editor.header.flowButton.label")}
         </ButtonLink>
         <ButtonLink
-          href={`/typebots/${typebot?.id}/theme`}
+          href={`/bots/${typebot?.id}/theme`}
           variant={router.pathname.endsWith("theme") ? "outline" : "ghost"}
           size="sm"
         >
           {t("editor.header.themeButton.label")}
         </ButtonLink>
         <ButtonLink
-          href={`/typebots/${typebot?.id}/settings`}
+          href={`/bots/${typebot?.id}/settings`}
           variant={router.pathname.endsWith("settings") ? "outline" : "ghost"}
           size="sm"
         >
@@ -74,10 +74,10 @@ export const GuestTypebotHeader = () => {
                   ? {
                       pathname: `/register`,
                       query: {
-                        redirectPath: `/typebots/${typebot.id}/duplicate`,
+                        redirectPath: `/bots/${typebot.id}/duplicate`,
                       },
                     }
-                  : `/typebots/${typebot.id}/duplicate`
+                  : `/bots/${typebot.id}/duplicate`
               }
               variant="secondary"
               disabled={isNotDefined(typebot)}

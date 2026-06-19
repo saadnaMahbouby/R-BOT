@@ -35,7 +35,7 @@ export const resultsRouter = {
   getResults: authenticatedProcedure
     .route({
       method: "GET",
-      path: "/v1/typebots/{typebotId}/results",
+      path: "/v1/bots/{typebotId}/results",
       summary: "List results ordered by descending creation date",
       tags: ["Results"],
     })
@@ -51,7 +51,7 @@ export const resultsRouter = {
   getResult: authenticatedProcedure
     .route({
       method: "GET",
-      path: "/v1/typebots/{typebotId}/results/{resultId}",
+      path: "/v1/bots/{typebotId}/results/{resultId}",
       summary: "Get result by id",
       tags: ["Results"],
     })
@@ -66,7 +66,7 @@ export const resultsRouter = {
   getResultTranscript: authenticatedProcedure
     .route({
       method: "GET",
-      path: "/v1/typebots/{typebotId}/results/{resultId}/transcript",
+      path: "/v1/bots/{typebotId}/results/{resultId}/transcript",
       summary: "Get result transcript",
       tags: ["Results"],
     })
@@ -90,7 +90,7 @@ export const resultsRouter = {
   getResultLogs: authenticatedProcedure
     .route({
       method: "GET",
-      path: "/v1/typebots/{typebotId}/results/{resultId}/logs",
+      path: "/v1/bots/{typebotId}/results/{resultId}/logs",
       summary: "List result logs",
       tags: ["Results"],
     })
@@ -101,7 +101,7 @@ export const resultsRouter = {
   deleteResults: authenticatedProcedure
     .route({
       method: "DELETE",
-      path: "/v1/typebots/{typebotId}/results",
+      path: "/v1/bots/{typebotId}/results",
       summary: "Delete results",
       tags: ["Results"],
     })
@@ -111,7 +111,7 @@ export const resultsRouter = {
   getResultFile: authenticatedProcedure
     .route({
       method: "GET",
-      path: "/typebots/{typebotId}/results/{resultId}/{fileName}",
+      path: "/bots/{typebotId}/results/{resultId}/{fileName}",
       successStatus: 302,
       outputStructure: "detailed",
       deprecated: true,
@@ -129,7 +129,7 @@ export const resultsRouter = {
   getResultBlockFile: authenticatedProcedure
     .route({
       method: "GET",
-      path: "/typebots/{typebotId}/results/{resultId}/blocks/{blockId}/{fileName}",
+      path: "/bots/{typebotId}/results/{resultId}/blocks/{blockId}/{fileName}",
       successStatus: 302,
       outputStructure: "detailed",
     })

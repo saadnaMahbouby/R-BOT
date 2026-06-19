@@ -34,7 +34,7 @@ const output = z.object({
 export const getLinkedTypebots = authenticatedProcedure
   .route({
     method: "GET",
-    path: "/v1/typebots/{typebotId}/linkedTypebots",
+    path: "/v1/bots/{typebotId}/linkedTypebots",
     summary: "Get linked typebots",
     tags: ["Typebot"],
   })

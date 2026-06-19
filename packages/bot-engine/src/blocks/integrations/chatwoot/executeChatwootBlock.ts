@@ -35,7 +35,7 @@ const parseChatwootOpenCode = ({
   window.$chatwoot.setCustomAttributes({
     typebot_result_url: "${
       env.NEXTAUTH_URL
-    }/typebots/${typebotId}/results?id=${resultId}",
+    }/bots/${typebotId}/results?id=${resultId}",
   });
   window.$chatwoot.toggle("open");
   `;

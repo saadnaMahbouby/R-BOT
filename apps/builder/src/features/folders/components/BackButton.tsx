@@ -19,7 +19,7 @@ export const BackButton = ({ id }: { id: string | null }) => {
   const handleMouseLeave = () => setMouseOverFolderId(undefined);
   return (
     <ButtonLink
-      href={id ? `/typebots/folders/${id}` : "/typebots"}
+      href={id ? `/bots/folders/${id}` : "/bots"}
       variant={
         isTypebotOver || draggedTypebot ? "outline" : "outline-secondary"
       }

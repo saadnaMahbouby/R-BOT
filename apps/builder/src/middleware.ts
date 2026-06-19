@@ -11,7 +11,7 @@ export function middleware(req: NextRequest) {
 
   if (pathname === "/") {
     const toSignedIn =
-      locale && locale !== defaultLocale ? `/${locale}/typebots` : "/typebots";
+      locale && locale !== defaultLocale ? `/${locale}/bots` : "/bots";
     const toSignin =
       locale && locale !== defaultLocale ? `/${locale}/signin` : "/signin";
 
@@ -19,7 +19,7 @@ export function middleware(req: NextRequest) {
     url.pathname = isMostLikelySignedIn ? toSignedIn : toSignin;
 
     return NextResponse.redirect(url);
-  } else if (pathname === "/typebots") {
+  } else if (pathname === "/bots") {
     const callbackUrl = searchParams.get("callbackUrl");
     const redirectPath = sanitizeRedirectPath(
       searchParams.get("redirectPath") ??
@@ -56,5 +56,5 @@ function sanitizeRedirectPath(
 }
 
 export const config = {
-  matcher: ["/", "/typebots"],
+  matcher: ["/", "/bots"],
 };

@@ -62,7 +62,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       "/register",
       "/signin/email-redirect",
     ].includes(router.pathname);
-    const isPathPublicFriendly = /\/typebots\/.+\/(edit|theme|settings)/.test(
+    const isPathPublicFriendly = /\/bots\/.+\/(edit|theme|settings)/.test(
       router.pathname,
     );
     if (isSignInPath || isPathPublicFriendly) return;
@@ -70,7 +70,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       router.replace({
         pathname: "/signin",
         query:
-          router.asPath !== "/typebots"
+          router.asPath !== "/bots"
             ? {
                 redirectPath: router.asPath,
               }
