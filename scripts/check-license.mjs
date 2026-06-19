@@ -1,21 +1,18 @@
 #!/usr/bin/env node
 // Vérifie la licence au démarrage du conteneur. Sort en erreur (1) si la
-// licence est configurée mais invalide/expirée, ce qui empêche l'app de tourner.
-// Si aucune clé publique n'est configurée, on autorise le démarrage (licence non activée).
+// licence est absente / invalide / expirée → l'app ne démarre pas.
+// La clé publique est GRAVÉE ici (dans l'image) : elle n'est pas surchargeable
+// par une variable d'environnement, donc la vérification ne peut pas être
+// désactivée en éditant .env.docker. Seul le détenteur de la clé privée
+// (hors instance) peut générer/prolonger une licence valide.
 import crypto from "node:crypto";
 
-const publicKeyBase64 = process.env.LICENSE_PUBLIC_KEY;
+const publicKeyBase64 =
+  "MCowBQYDK2VwAyEAgkhRQub8veZIf1bhYhiG5u0vFaHQxTcQhb0P46PRLQQ=";
 const licenseKey = process.env.LICENSE_KEY;
 
-if (!publicKeyBase64) {
-  console.warn(
-    "⚠️  Licence non activée (LICENSE_PUBLIC_KEY absent) — démarrage autorisé.",
-  );
-  process.exit(0);
-}
-
 if (!licenseKey) {
-  console.error("❌ LICENSE_KEY manquante alors que la licence est activée.");
+  console.error("❌ LICENSE_KEY manquante — l'application ne peut pas démarrer.");
   process.exit(1);
 }
 
