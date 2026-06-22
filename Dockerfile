@@ -93,3 +93,15 @@ USER nextjs
 EXPOSE 3000
 ENV PORT=3000
 ENTRYPOINT ./${SCOPE}-entrypoint.sh
+
+# ================= MIGRATOR (SANS SOURCE) ===================
+# Image minimale pour appliquer les migrations DB sans embarquer le code de l'app.
+# Ne contient que le schéma Prisma + les fichiers SQL de migration.
+FROM node:22-bullseye-slim AS migrator
+WORKDIR /app
+RUN apt-get -qy update \
+  && apt-get -qy --no-install-recommends install openssl ca-certificates \
+  && rm -rf /var/lib/apt/lists/* \
+  && npm install -g prisma@6.19.0
+COPY packages/prisma/postgresql ./postgresql
+CMD ["prisma", "migrate", "deploy", "--schema=postgresql/schema.prisma"]

@@ -1,0 +1,104 @@
+# Compose de LIVRAISON (côté client) : tourne uniquement depuis les images
+# fournies (rbot-builder / rbot-viewer / rbot-migrator). Aucun code source.
+# Le client fait : docker load -i rbot-release.tar && docker compose up -d
+services:
+  typebot-db-docker:
+    image: postgres:16
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - typebot-network
+
+  typebot-redis:
+    image: redis:alpine
+    restart: always
+    command: --requirepass Rb0t-redis-2026 --save 60 1 --loglevel warning
+    healthcheck:
+      test:
+        ["CMD-SHELL", "redis-cli -a Rb0t-redis-2026 --no-auth-warning ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    volumes:
+      - redis-data:/data
+    networks:
+      - typebot-network
+
+  typebot-minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    restart: always
+    env_file: .env.docker
+    ports:
+      - "9010:9000"
+      - "9011:9001"
+    volumes:
+      - minio-data:/data
+    networks:
+      - typebot-network
+
+  typebot-migrate:
+    image: rbot-migrator:latest
+    restart: "no"
+    depends_on:
+      typebot-db-docker:
+        condition: service_healthy
+    env_file: .env.docker
+    networks:
+      - typebot-network
+
+  typebot-builder:
+    image: rbot-builder:latest
+    restart: always
+    depends_on:
+      typebot-db-docker:
+        condition: service_healthy
+      typebot-redis:
+        condition: service_healthy
+      typebot-minio:
+        condition: service_started
+      typebot-migrate:
+        condition: service_completed_successfully
+    ports:
+      - "8200:3000"
+    env_file: .env.docker
+    environment:
+      - REDIS_URL=redis://:Rb0t-redis-2026@typebot-redis:6379
+    networks:
+      - typebot-network
+
+  typebot-viewer:
+    image: rbot-viewer:latest
+    restart: always
+    depends_on:
+      typebot-db-docker:
+        condition: service_healthy
+      typebot-redis:
+        condition: service_healthy
+      typebot-minio:
+        condition: service_started
+      typebot-migrate:
+        condition: service_completed_successfully
+    ports:
+      - "8201:3000"
+    env_file: .env.docker
+    environment:
+      - REDIS_URL=redis://:Rb0t-redis-2026@typebot-redis:6379
+    networks:
+      - typebot-network
+
+networks:
+  typebot-network:
+    driver: bridge
+
+volumes:
+  db-data:
+  redis-data:
+  minio-data:
