@@ -34,8 +34,14 @@ const createUser = adminProcedure
       role: z.nativeEnum(UserRole).default(UserRole.ADMIN),
     }),
   )
-  .handler(async ({ input }) => {
+  .handler(async ({ context, input }) => {
     const email = input.email.toLowerCase().trim();
+    const rootMembership = await prisma.memberInWorkspace.findFirst({
+      where: { userId: context.user.id, role: WorkspaceRole.ADMIN },
+      orderBy: { workspace: { createdAt: "asc" } },
+      select: { workspaceId: true },
+    });
+    const rootWorkspaceId = rootMembership?.workspaceId;
     try {
       const user = await prisma.user.create({
         data: {
@@ -44,19 +50,26 @@ const createUser = adminProcedure
           password: await hashPassword(input.password),
           role: input.role,
           onboardingCategories: [],
-          workspaces: {
-            create: {
-              role: WorkspaceRole.ADMIN,
-              workspace: {
+          workspaces: rootWorkspaceId
+            ? {
                 create: {
-                  name: input.name
-                    ? `${input.name}'s workspace`
-                    : "My workspace",
-                  plan: parseWorkspaceDefaultPlan(email),
+                  role: WorkspaceRole.MEMBER,
+                  workspaceId: rootWorkspaceId,
+                },
+              }
+            : {
+                create: {
+                  role: WorkspaceRole.ADMIN,
+                  workspace: {
+                    create: {
+                      name: input.name
+                        ? `${input.name}'s workspace`
+                        : "My workspace",
+                      plan: parseWorkspaceDefaultPlan(email),
+                    },
+                  },
                 },
               },
-            },
-          },
         },
         select: { id: true, email: true },
       });
