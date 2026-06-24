@@ -31,7 +31,11 @@ export const {
   adapter: createAuthPrismaAdapter(prisma),
   secret: env.ENCRYPTION_SECRET,
   providers,
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 60,
+    updateAge: 5 * 60,
+  },
   trustHost: env.VERCEL_GIT_COMMIT_SHA ? undefined : true,
   pages: {
     signIn: "/signin",
